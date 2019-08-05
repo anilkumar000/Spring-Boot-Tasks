@@ -104,7 +104,7 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public List<Track> selectTrackByName(String trackname) throws TrackNotFoundException{
 
-     List<Track> foundTracks=trackRepository.selectTrackByName(trackname);
+     List<Track> foundTracks=trackRepository.findBy(trackname);
      if(foundTracks.isEmpty()){
          throw new TrackNotFoundException("No Track exists");
      }
