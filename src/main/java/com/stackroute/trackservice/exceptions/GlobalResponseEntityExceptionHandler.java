@@ -6,9 +6,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 public class GlobalResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(value= { IllegalArgumentException.class, IllegalStateException.class })
+    @ExceptionHandler(value= { TrackAlreadyExistsException.class,TrackNotFoundException.class })
     protected ResponseEntity<Object> handleConflict(Exception ex) {
 
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(value= { Exception.class })
+    protected ResponseEntity<Object> handleInternalConflict(Exception ex) {
+
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
