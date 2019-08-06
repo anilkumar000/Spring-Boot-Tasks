@@ -12,4 +12,9 @@ public class GlobalResponseEntityExceptionHandler extends ResponseEntityExceptio
 
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(value= {Exception.class})
+    protected ResponseEntity<Object> handleInternalConflict(Exception ex) {
+
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
