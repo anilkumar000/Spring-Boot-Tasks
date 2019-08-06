@@ -21,63 +21,82 @@ import java.util.Optional;
 public class TrackServiceImpl implements TrackService {
     TrackRepository trackRepository;
 
+    public TrackServiceImpl() {
+    }
+
     public TrackServiceImpl(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
     }
 
     /**
      * Insert track into the database.
+     *
      * @Input Track to be inserted in the database
      * @Output Track created after inserting into the database.
      */
     @Override
-    public Track saveTrack(Track track)throws TrackAlreadyExistsException {
-        if (trackRepository.existsById(track.getTrackId())){
+    public Track saveTrack(Track track) throws TrackAlreadyExistsException {
+        Track saveTrack = null;
+        if (trackRepository.existsById(track.getTrackId())) {
             throw new TrackAlreadyExistsException("Track with Same ID already exists!");
+        } else {
+            saveTrack = trackRepository.save(track);
+            if (saveTrack == null) {
+                throw new TrackAlreadyExistsException("Track is null");
+            }
+            return saveTrack;
         }
-        return trackRepository.save(track);
 
     }
 
     /**
      * Finds the track in the database using the trackId.
+     *
      * @Input ID of the track to get from database
      * @Output Track object
      */
     @Override
     public Track getTrackById(int id) throws TrackNotFoundException {
-        if (!(trackRepository.existsById(id))){
+        Track foundTrack = null;
+        if (trackRepository.existsById(id)) {
             throw new TrackNotFoundException("Track you searched for, Is not available");
+        } else {
+            foundTrack = trackRepository.findById(id).get();
+            if (foundTrack == null) {
+                throw new TrackNotFoundException("Track is null");
+            }
         }
-        return trackRepository.findById(id).get();
-
+        return foundTrack;
     }
+
 
     /**
      * First checks the track is present in the database and stores in a Optional.
      * If the track is present then deletes the track in the database and return the track
      * else return null.
+     *
      * @Input Id of the track to be deleted.
      * @Output Track if deleted or null if the track is not found in the database.
      */
     @Override
     public Optional<Track> deleteTrackById(int id) throws TrackNotFoundException {
-        if (!trackRepository.existsById(id)){
+        if (!trackRepository.existsById(id)) {
             throw new TrackNotFoundException("Track you want to delete, Does not exist");
         }
-        Optional<Track> optionalTrack=trackRepository.findById(id);
+        Optional<Track> optionalTrack = trackRepository.findById(id);
         trackRepository.delete(optionalTrack.get());
         return optionalTrack;
 
     }
 
-/**
- * Returns all the tracks in the database.
- * @Output List of Tracks as List<Track>
-*/
- @Override
-    public List<Track> getAllTracks() throws Exception{
-        if (trackRepository.findAll().isEmpty()){
+    /**
+     * Returns all the tracks in the database.
+     *
+     * @Output List of Tracks as List<Track>
+     */
+    @Override
+    public List<Track> getAllTracks() throws Exception {
+        if (trackRepository.findAll().isEmpty()) {
             throw new Exception();
         }
         return trackRepository.findAll();
@@ -86,15 +105,16 @@ public class TrackServiceImpl implements TrackService {
 
     /**
      * Finds the Track by Id as a reference and updated it's fields and save's it.
+     *
      * @Input Id of the track to be updated
      * @Input Track object containing the updated details
      * @Output Updated track.
      */
- @Override
-    public Track updateTrack(int id,Track trackToUpdate)throws TrackNotFoundException {
-     if (!trackRepository.existsById(id)){
-         throw new TrackNotFoundException("Track to update doesn't exist,try to create new!");
-     }
+    @Override
+    public Track updateTrack(int id, Track trackToUpdate) throws TrackNotFoundException {
+        if (!trackRepository.existsById(id)) {
+            throw new TrackNotFoundException("Track to update doesn't exist,try to create new!");
+        }
         trackRepository.findById(id).get().setTrackName(trackToUpdate.getTrackName());
         trackRepository.findById(id).get().setComments(trackToUpdate.getComments());
         return trackRepository.save(trackRepository.findById(id).get());
@@ -102,13 +122,15 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> selectTrackByName(String trackname) throws TrackNotFoundException{
+    public List<Track> selectTrackByName(String trackname) throws TrackNotFoundException {
 
-     List<Track> foundTracks=trackRepository.findBy(trackname);
-     if(foundTracks.isEmpty()){
-         throw new TrackNotFoundException("No Track exists");
-     }
+        List<Track> foundTracks = trackRepository.findBy(trackname);
+        if (foundTracks.isEmpty()) {
+            throw new TrackNotFoundException("No Track exists");
+        }
 
-     return foundTracks;
-    }
+        return foundTracks;
+
 }
+
+ }

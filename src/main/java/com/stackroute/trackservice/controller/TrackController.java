@@ -52,7 +52,9 @@ public class TrackController {
     {
 //        try {
             Track foundTrackById = trackService.getTrackById(id);
+
             return new ResponseEntity<>(foundTrackById, HttpStatus.FOUND);
+
 //        }
 //        catch (TrackNotFoundException ex){
 //            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
