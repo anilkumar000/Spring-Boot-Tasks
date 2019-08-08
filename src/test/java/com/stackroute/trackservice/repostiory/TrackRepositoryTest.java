@@ -36,7 +36,7 @@ public class TrackRepositoryTest {
 
         @After
         public void tearDown(){
-
+                track=null;
             trackRepository.deleteAll();
         }
 
