@@ -28,7 +28,7 @@ public class TrackServiceImplTest {
     //Inject the mocks as dependencies into TrackServiceImpl
     @InjectMocks
     TrackServiceImpl trackService;
-    List<Track> list= null;
+    List<Track> list;
     @Before
     public void setUp(){
         //Initialising the mock object
@@ -39,6 +39,12 @@ public class TrackServiceImplTest {
         track.setTrackId(10);
         list = new ArrayList<>();
         list.add(track);
+    }
+    
+    @After
+    public void teardown(){
+        track=null;
+        list=null;
     }
 
 //  Test - TrackServiceImpl.saveTrack()
