@@ -31,9 +31,6 @@ public class TrackRepositoryTest {
             track.setTrackId(10);
             track.setTrackName("John");
             track.setComments("test1");
-//            track.setTrackId(11);
-//            track.setTrackName("Johnson");
-//            track.setComments("test2");
 
         }
 
@@ -59,7 +56,7 @@ public class TrackRepositoryTest {
             Track fetchTrack= trackRepository.findById(track.getTrackId()).get();
             Assert.assertNotSame(testTrack,fetchTrack);
         }
-//
+
         @Test
         public void testShouldReturnAllTracks() {
             Track track1 = new Track(12,"vadi pulla","comments for vadi pulla");
