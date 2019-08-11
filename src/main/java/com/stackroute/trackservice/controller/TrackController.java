@@ -70,7 +70,7 @@ public class TrackController {
     public ResponseEntity<?> deleteTrackById(@RequestParam int id)throws TrackNotFoundException {
 //        try {
             Track deletedTrack=trackService.deleteTrackById(id).get();
-            return new ResponseEntity<>(deletedTrack,HttpStatus.OK);
+            return new ResponseEntity<>(deletedTrack,HttpStatus.MOVED_PERMANENTLY);
 //        }
 //        catch (TrackNotFoundException ex){
 //            return new ResponseEntity<>(ex.getMessage(),HttpStatus.CONFLICT);
