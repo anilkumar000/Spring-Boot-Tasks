@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.validation.constraints.AssertTrue;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest
@@ -23,6 +24,7 @@ public class TrackRepositoryTest {
         @Autowired
         TrackRepository trackRepository;
         Track track;
+        Track trackToUpdate;
 
         @Before
         public void setUp()
@@ -31,15 +33,18 @@ public class TrackRepositoryTest {
             track.setTrackId(10);
             track.setTrackName("John");
             track.setComments("test1");
-//            track.setTrackId(11);
-//            track.setTrackName("Johnson");
-//            track.setComments("test2");
+            trackToUpdate=new Track();
+            trackToUpdate.setTrackId(10);
+            trackToUpdate.setTrackName("Johnson");
+            trackToUpdate.setComments("testupdate");
+
 
         }
 
         @After
         public void tearDown(){
-
+            track=null;
+            trackToUpdate=null;
             trackRepository.deleteAll();
         }
 
@@ -59,7 +64,7 @@ public class TrackRepositoryTest {
             Track fetchTrack= trackRepository.findById(track.getTrackId()).get();
             Assert.assertNotSame(testTrack,fetchTrack);
         }
-//
+
         @Test
         public void testShouldReturnAllTracks() {
             Track track1 = new Track(12,"vadi pulla","comments for vadi pulla");
@@ -74,14 +79,26 @@ public class TrackRepositoryTest {
             Assert.assertEquals(testTracks,outputList);
         }
 
-//        @Test(expected = TrackAlreadyExistsException.class)
-//        public void GivenTrackIdShouldDeletetrackAndReturnNull(){
-//
-//            trackRepository.save(track);
-//            trackRepository.delete(track);
-//
-//            Assert.assert(trackRepository.findById(track.getTrackId()));
-////        }
+        @Test
+        public void GivenTrackIdShouldDeletetrackAndReturnNull(){
+            trackRepository.save(track);
+            trackRepository.delete(track);
+            Optional<Track> expected=Optional.empty();
+
+            Assert.assertEquals(expected,trackRepository.findById(track.getTrackId()));
+        }
+
+    @Test
+    public void GivenTrackWithSameIdShouldUpdatedTrackOfThatId(){
+        trackRepository.save(track);
+        Track updatedTrack = trackRepository.findById(trackToUpdate.getTrackId()).get();
+        updatedTrack.setTrackName(trackToUpdate.getTrackName());
+        updatedTrack.setComments(trackToUpdate.getComments());
+        Track expected=trackToUpdate;
+        Track foundTrack=trackRepository.save(trackToUpdate);
+
+        Assert.assertEquals(expected,foundTrack);
+    }
 
 
 

@@ -36,15 +36,11 @@ public class TrackServiceImpl implements TrackService {
      */
     @Override
     public Track saveTrack(Track track) throws TrackAlreadyExistsException {
-        Track saveTrack = null;
         if (trackRepository.existsById(track.getTrackId())) {
             throw new TrackAlreadyExistsException("Track with Same ID already exists!");
         } else {
-            saveTrack = trackRepository.save(track);
-            if (saveTrack == null) {
-                throw new TrackAlreadyExistsException("Track is null");
-            }
-            return saveTrack;
+            return trackRepository.save(track);
+
         }
 
     }
@@ -58,7 +54,7 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public Track getTrackById(int id) throws TrackNotFoundException {
         Track foundTrack = null;
-        if (trackRepository.existsById(id)) {
+        if (!trackRepository.existsById(id)) {
             throw new TrackNotFoundException("Track you searched for, Is not available");
         } else {
             foundTrack = trackRepository.findById(id).get();
@@ -111,15 +107,19 @@ public class TrackServiceImpl implements TrackService {
      * @Output Updated track.
      */
     @Override
-    public Track updateTrack(int id, Track trackToUpdate) throws TrackNotFoundException {
-        if (!trackRepository.existsById(id)) {
-            throw new TrackNotFoundException("Track to update doesn't exist,try to create new!");
+    public Track updateTrack(Track trackToUpdate) throws TrackNotFoundException {
+        if (trackRepository.existsById(trackToUpdate.getTrackId())) {
+            Optional<Track> optionalTrack = trackRepository.findById(trackToUpdate.getTrackId());
+            if (optionalTrack.isPresent()) {
+                Track updatedTrack = optionalTrack.get();
+                updatedTrack.setTrackName(trackToUpdate.getTrackName());
+                updatedTrack.setComments(trackToUpdate.getComments());
+                return trackRepository.save(trackToUpdate);
+            }
         }
-        trackRepository.findById(id).get().setTrackName(trackToUpdate.getTrackName());
-        trackRepository.findById(id).get().setComments(trackToUpdate.getComments());
-        return trackRepository.save(trackRepository.findById(id).get());
-
+        throw new TrackNotFoundException();
     }
+
 
     @Override
     public List<Track> selectTrackByName(String trackname) throws TrackNotFoundException {
