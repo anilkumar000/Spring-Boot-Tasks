@@ -48,7 +48,7 @@ public class TrackRepositoryTest {
             trackRepository.deleteAll();
         }
 
-
+//Test for savetrack
         @Test
         public void givenTrackIdShouldFetchTheRespectiveTrack(){
             trackRepository.save(track);
@@ -57,6 +57,7 @@ public class TrackRepositoryTest {
 
         }
 
+//        Test for saveTrackFailure
         @Test
         public void GivenTrackIdShouldShowSaveTrackFailure(){
             Track testTrack = new Track(10,"anil","comment");
@@ -65,6 +66,7 @@ public class TrackRepositoryTest {
             Assert.assertNotSame(testTrack,fetchTrack);
         }
 
+//        Test for getAllTtracks
         @Test
         public void testShouldReturnAllTracks() {
             Track track1 = new Track(12,"vadi pulla","comments for vadi pulla");
@@ -79,6 +81,7 @@ public class TrackRepositoryTest {
             Assert.assertEquals(testTracks,outputList);
         }
 
+//        Test for deletetrack
         @Test
         public void GivenTrackIdShouldDeletetrackAndReturnNull(){
             trackRepository.save(track);
@@ -88,6 +91,7 @@ public class TrackRepositoryTest {
             Assert.assertEquals(expected,trackRepository.findById(track.getTrackId()));
         }
 
+//        Test for updatingTrack
     @Test
     public void GivenTrackWithSameIdShouldUpdatedTrackOfThatId(){
         trackRepository.save(track);
