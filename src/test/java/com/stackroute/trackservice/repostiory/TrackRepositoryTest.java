@@ -22,9 +22,9 @@ import java.util.Optional;
 public class TrackRepositoryTest {
 
         @Autowired
-        TrackRepository trackRepository;
-        Track track;
-        Track trackToUpdate;
+        private TrackRepository trackRepository;
+        private Track track;
+        private Track trackToUpdate;
 
         @Before
         public void setUp()
